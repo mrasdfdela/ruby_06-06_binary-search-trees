@@ -13,25 +13,31 @@ end
 
 # Tree class, accepts array
 class Tree
-  attr_reader :arr
-  # attr_accessor
+  attr_accessor :node_tree
+  attr_reader :arr, :root, :idx_last
 
   def initialize(arr)
+    @node_tree = build_tree(arr)
     @arr = arr
+    @idx_last = @arr.length - 1
   end
 
-  def root
-    @root = build_tree
-  end
-
-  def build_tree(arr)
-    idx_mid = arr.length / 2
-    
+  def build_tree(arr=@arr)
+    if arr.length == 0
+      return
+    elsif arr.length == 1
+      return Node.new(arr[0])
+    else
+      mid = arr.length / 2
+      first_half = arr[0...mid]
+      sec_half = arr[mid + 1..-1]
+      Node.new(arr[mid], build_tree(first_half), build_tree(sec_half))
+    end
   end
 end
 
-test_node = Node.new(1)
-test_tree = Tree.new([1,2,3])
+test_array = [1,7,4,23,8,9,4,3,5,7,9,67,6345,324]
+test_tree = Tree.new(test_array)
 
 byebug
 puts "end program"
