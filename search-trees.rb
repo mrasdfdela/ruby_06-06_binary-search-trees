@@ -17,22 +17,28 @@ class Tree
   attr_reader :arr, :root, :idx_last
 
   def initialize(arr)
-    @node_tree = build_tree(arr)
-    @arr = arr
+    @arr = arr.sort.uniq
     @idx_last = @arr.length - 1
+    @node_tree = []
+    self.build_tree
   end
 
   def build_tree(arr=@arr)
-    if arr.length == 0
-      return
-    elsif arr.length == 1
-      return Node.new(arr[0])
+    mid_idx = arr.length / 2
+    first_half = arr[0...mid_idx]
+    sec_half = arr[mid_idx + 1..-1]
+
+    case arr.length
+    when 1
+      new_node = Node.new(arr[0])
+    when 2
+      new_node = Node.new(arr[0], nil, build_tree([arr[1]]))
     else
-      mid = arr.length / 2
-      first_half = arr[0...mid]
-      sec_half = arr[mid + 1..-1]
-      Node.new(arr[mid], build_tree(first_half), build_tree(sec_half))
+      new_node = Node.new(arr[mid_idx], build_tree(first_half), build_tree(sec_half))
     end
+
+    @node_tree << new_node
+    new_node.value
   end
 end
 
